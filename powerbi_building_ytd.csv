@@ -1,0 +1,43 @@
+Building Ref,Building,Specialism,Manager,Local Authority,Void Loss Target,VL,Rent,YTD_Pct,Beat_Target
+3,Alphen Road,Young People,Manager 9,Tower Hamlets,0.07064408825322302,10510.81,30989.79,0.33917009440851326,False
+28,Camargue Street,Homelessness,Manager 2,Richmond,0.065,28205.41,206510.59,0.1365809375683833,False
+32,Casablanca,Mental Health,Manager 4,Bromley,0.065,72010.93,511778.32999999996,0.1407072667574651,False
+35,Champagne Way,Mental Health,Manager 6,Tower Hamlets,0.065,14692.58,112273.53,0.13086414936806565,False
+45,Crassula Road,Mental Health,Manager 5,Newham,0.04959410505876979,32795.63,251053.43,0.1306320730212688,False
+50,Dartmoor Close,Learning Disabilities,Manager 3,Richmond,0.065,6381.67,38363.01,0.16634956433293424,False
+57,Dianthus Road,Homelessness,Manager 2,Thurrock,0.065,7397.87,88802.07,0.08330740488369245,False
+65,Echium Road,Young People,Manager 8,Westminster,0.0800491422558058,8669.27,113115.86,0.076640623162835,True
+67,Elphinstone Avenue,Young People,Manager 8,Bracknell Forest,0.07999999999999999,19981.27,200754.49,0.09953087475154354,False
+75,Fell Close,Homelessness,Manager 2,Bromley,0.055,15543.560000000001,102691.15,0.1513622157313459,False
+78,Flamingo Vlei,Homelessness,Manager 2,Tower Hamlets,0.08,8039.04,212072.56,0.03790702578400525,True
+95,Hill Road,Homelessness,Manager 2,Westminster,0.045,17187.31,124502.79,0.13804758913434792,False
+96,Hopley Road,Homelessness,Manager 2,Bromley,0.049811954777567044,25470.629999999997,69687.66,0.3654969904284345,False
+102,Janssens Avenue,Mental Health,Manager 5,Westminster,0.065,6707.59,102921.65,0.06517180787521382,False
+114,Lewis Road,Mental Health,Manager 4,Bromley,0.06668402580365503,9876.5,187679.43,0.052624307309543726,True
+116,Lilypond Close,Young People,Manager 8,Tower Hamlets,0.10000000000000002,4671.57,72949.37,0.06403852425319094,True
+118,Long Acre Street,Young People,Manager 8,Tower Hamlets,0.12721426662887544,7977.9,20480.68,0.3895329647257806,False
+119,Longfellow Road,Young People,Manager 8,Newham,0.08000000000000002,21537.71,352686.17000000004,0.061067634151914706,True
+122,Madeira Crescent,Homelessness,Manager 1,Bromley,0.05,25844.34,173438.04,0.14901194686010058,False
+123,Malaga Crescent,Learning Disabilities,Manager 3,Surrey,0.065,14927.49,41884.38,0.35639754008534924,False
+129,May Road,Homelessness,Manager 2,Barking & Dagenham,0.059999999999999984,10235.619999999999,69560.61,0.14714678321538582,False
+136,Muscat Close,Homelessness,Manager 1,Tower Hamlets,0.06,30183.2,408629.84,0.07386440500772043,False
+153,Park Road,Learning Disabilities,Manager 3,Newham,0.15,23279.38,79926.70999999999,0.29125907972441256,False
+162,Pine Avenue,Young People,Manager 8,Tower Hamlets,0.1,18035.579999999998,251097.91999999998,0.07182687933058148,True
+167,Porcupine Way,Learning Disabilities,Manager 3,Ealing,0.065,16455.23,232496.35,0.07077629390740972,False
+177,Rubens Road,Mental Health,Manager 6,Hillingdon,0.065,17319.86,557104.56,0.03108906521964207,True
+182,Schreiner Road,Learning Disabilities,Manager 3,Tower Hamlets,0.065,10550.78,73538.1,0.14347365515290714,False
+184,Service Road,Homelessness,Manager 1,Tower Hamlets,0.07364465518790357,103426.54,813625.74,0.12711807765570446,False
+186,Shelley Road,Homelessness,Manager 1,Newham,0.06999999999999999,8025.030000000001,73488.20999999999,0.10920159846048777,False
+187,Sherry Bend,Learning Disabilities,Manager 3,Tower Hamlets,0.085,27804.120000000003,231835.48,0.11993039201764977,False
+188,Sherry Close,Homelessness,Manager 1,Southwark,0.06,30592.09,107124.41,0.28557534179184746,False
+191,Shiraz Close,Young People,Manager 9,Tower Hamlets,0.15,14131.98,141993.2,0.09952575193741671,True
+201,Study Close,Learning Disabilities,Manager 3,Bromley,0.08,5184.53,117911.7,0.04396959758870409,True
+207,Tamarin Close,Homelessness,Manager 1,Kensington & Chelsea,0.060000000000000005,38156.05,344818.84,0.11065535166233956,False
+210,Terrapin Lane,Mental Health,Manager 6,Tower Hamlets,0.065,21763.7,486022.62,0.044779191552854064,True
+214,The Sands,Mental Health,Manager 5,Newham,0.065,9543.0,153440.03,0.0621936791852817,True
+215,Tritonia Road,Young People,Manager 9,Surrey,0.09486381016306629,7896.85,74338.82,0.10622780937335298,False
+217,Van Hoorn Road,Young People,Manager 9,Richmond,0.15,19325.51,236632.2,0.08166897827092001,True
+222,Vink Street,Young People,Manager 9,Windsor & Maidenhead,0.15,20870.76,89975.7,0.2319599625232146,False
+227,Welgelegen Street,Mental Health,Manager 5,Tower Hamlets,0.1,5496.32,34486.62,0.15937543313899707,False
+232,West Riding Village Complex,Mental Health,Manager 6,Tower Hamlets,0.065,10537.460000000001,44202.76,0.23838918655758148,False
+236,Wynyard Road,Mental Health,Manager 4,Slough,0.065,36871.58,191014.05000000002,0.1930307220856267,False
