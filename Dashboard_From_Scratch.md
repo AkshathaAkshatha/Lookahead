@@ -179,3 +179,4 @@ Place on the right side. Selecting a value filters **all** visuals.
 3. Specialism bar (who drives the problem).
 4. Top 10 buildings (where to act).
 5. Recommend **9.0%** target for 2026/27 (say aloud; optional extra card).
+
