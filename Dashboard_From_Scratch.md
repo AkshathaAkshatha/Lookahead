@@ -74,7 +74,7 @@ In-Month Void Loss % = DIVIDE ( SUM ( FactVoidLoss[Void Loss] ), SUM ( FactVoidL
 ## PHASE 3 — Page title (2 min)
 
 1. **Insert → Text box**.
-2. Type: **Void Loss Performance — YTD Apr 2025 to Mar 2026**.
+2. Type: **Void Loss Performance — YTD Apr 2025 to Feb 2026**.
 3. Large font, bold, top of page.
 
 ---
