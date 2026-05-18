@@ -358,12 +358,21 @@ In the single-query version, replace hardcoded `FilePath` with `Parameter.ExcelF
 
 ## PART 8 — Parameters, template & new financial year (don’t start again)
 
+### Choose your approach
+
+| Approach | Best for | Year comparison |
+|----------|----------|-----------------|
+| **A — One `.pbix` per year** (Steps below) | Archiving annual packs | Open two files side by side |
+| **B — One `.pbix` + Financial Year slicer** (**Part 9**) | **Same dashboard, switch & compare years** | **Slicer + optional YoY line chart** |
+
+**You preferred a year slicer** → build **Part 9** (add `FinancialYear` column, append files, slicer on report). Keep Part 8 for parameters and monthly refresh.
+
 ### The two refresh scenarios
 
 | When | What changes | What you do |
 |------|----------------|-------------|
 | **New month, same year** | 3 columns added to the **same** Excel | **Refresh** — same `.pbix`, queries unchanged |
-| **New financial year (e.g. 2026/27)** | **New Excel file**, new target % | **New report file** from template — **do not overwrite** 2025/26 |
+| **New financial year (e.g. 2026/27)** | **New Excel file** in folder | **Approach A:** new `.pbix` from template · **Approach B:** drop file in folder → **Refresh** (Part 9) |
 
 Power Query **steps stay the same** if the worksheet **layout** is the same (cols A–F + 3 columns per month).
 
