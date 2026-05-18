@@ -352,6 +352,206 @@ in
 
 After pasting: fix `FilePath`, sheet name, and February replace date if needed → **Close & Apply**.
 
+In the single-query version, replace hardcoded `FilePath` with `Parameter.ExcelFilePath` once parameters are created (Part 8).
+
+---
+
+## PART 8 — Parameters, template & new financial year (don’t start again)
+
+### The two refresh scenarios
+
+| When | What changes | What you do |
+|------|----------------|-------------|
+| **New month, same year** | 3 columns added to the **same** Excel | **Refresh** — same `.pbix`, queries unchanged |
+| **New financial year (e.g. 2026/27)** | **New Excel file**, new target % | **New report file** from template — **do not overwrite** 2025/26 |
+
+Power Query **steps stay the same** if the worksheet **layout** is the same (cols A–F + 3 columns per month).
+
+---
+
+### Step 1 — Create parameters (once)
+
+In Power BI Desktop: **Home → Manage Parameters → New parameter**
+
+Create these three:
+
+| Name | Type | Suggested current value | Used for |
+|------|------|-------------------------|----------|
+| `ExcelFilePath` | Text | Full path to `Interview_Data_Worksheet.xlsx` | Source file |
+| `FinancialYearLabel` | Text | `2025/26` | Report title / text boxes |
+| `OrgTargetPct` | Decimal | `0.065` | DAX target measure & reference lines |
+
+**Important:** For `ExcelFilePath`, click **Current Value** and browse to your file, or paste:
+
+`/Users/kwiffstaff/Downloads/Aks-CV/Look_ahead/Lookahead/Interview_Data_Worksheet.xlsx`
+
+---
+
+### Step 2 — Wire parameters into Power Query
+
+1. Open **Transform data**.
+2. Select **`FactVoidLoss`** (and **`MonthMap`** if separate) → **Advanced Editor** (or edit **Source** step).
+3. Replace hardcoded path with the parameter.
+
+**Source step should look like:**
+
+```powerquery
+Source = Excel.Workbook(Parameter.ExcelFilePath, null, true)
+```
+
+4. **Done** on each query that loads the file.
+
+**Optional:** Add a column in Power Query:
+
+```powerquery
+FinancialYear = Parameter.FinancialYearLabel
+```
+
+Useful if you later combine multiple years in one model (advanced).
+
+---
+
+### Step 3 — Wire `OrgTargetPct` into DAX (instead of hardcoded 0.065)
+
+Replace:
+
+```dax
+Org Target % = 0.065
+```
+
+With:
+
+```dax
+Org Target % = SELECTEDVALUE ( OrgTarget[Target], 0.065 )
+```
+
+**Simple approach for interview (no extra table):**
+
+```dax
+Org Target % = [Org Target % Value]
+```
+
+Create a **What-if parameter** or a one-row table — **easiest:**
+
+1. **Modeling → New measure**:
+
+```dax
+Org Target % = 0.065
+```
+
+2. Each year, edit the measure in the **2026/27** copy of the file to `0.09`, **or** use a parameter:
+
+```dax
+Org Target % = SELECTEDVALUE ( 'Target Parameter'[Org Target % Parameter], 0.065 )
+```
+
+(Create via **Modeling → New parameter** → Decimal → default `0.065`, name it `Org Target % Parameter`.)
+
+**Constant lines** on charts: use the measure `Org Target %` instead of typing `0.065`.
+
+---
+
+### Step 4 — Use `FinancialYearLabel` on the report
+
+1. **Insert → Text box** on the dashboard.
+2. Type: `Void Loss Performance — YTD ` then insert the parameter:
+   - **Insert → Card** with a measure, **or** manually type `2025/26` and change it when you copy the file.
+3. **Practical approach:** title text =  
+   `"Void Loss Performance — " & [FinancialYearLabel]`  
+   requires a measure:
+
+```dax
+Report Title = "Void Loss Performance — YTD " & SELECTEDVALUE ( FY[Label], "2025/26" )
+```
+
+**Simplest for submission:** hardcode title `2025/26`; change text when you copy to next year.
+
+---
+
+### Step 5 — Save as template (.pbit) — reuse without rebuilding
+
+1. Finish the 2025/26 report (queries + dashboard).
+2. **File → Export → Power BI template**.
+3. Save as `Lookahead_Void_Loss_Template.pbit`.
+
+**Next year:**
+
+1. Double-click `Lookahead_Void_Loss_Template.pbit`.
+2. Power BI prompts for parameter values → set:
+   - `ExcelFilePath` → `Interview_Data_Worksheet_2026-27.xlsx`
+   - `FinancialYearLabel` → `2026/27`
+   - `OrgTargetPct` → `0.09` (or whatever SMT agrees)
+3. **File → Save As** → `Lookahead_Void_Loss_2026-27.pbix`.
+4. **Refresh** → check KPIs and titles.
+
+Your **2025/26 file stays untouched** in the folder as the archived pack.
+
+---
+
+### Step 6 — Recommended folder structure
+
+```
+Lookahead/
+├── Interview_Data_Worksheet_2025-26.xlsx    ← current year source
+├── Interview_Data_Worksheet_2026-27.xlsx    ← next year (when issued)
+├── Lookahead_Void_Loss_2025-26.pbix         ← frozen after year-end
+├── Lookahead_Void_Loss_2026-27.pbix         ← active year
+├── Lookahead_Void_Loss_Template.pbit        ← master template
+└── Archive/
+    └── Lookahead_Void_Loss_2025-26.pdf      ← optional SMT snapshot
+```
+
+---
+
+### Step 7 — Monthly workflow (same financial year)
+
+1. Performance team publishes updated Excel (new month columns).
+2. Save over the same file **or** save as `..._2025-26_May.xlsx` and update `ExcelFilePath` once.
+3. Open **`Lookahead_Void_Loss_2025-26.pbix`** → **Refresh**.
+4. Spot-check: row count grew by ~42 rows per month; YTD % moved slightly.
+
+**No Power Query edits** if layout unchanged.
+
+---
+
+### Step 8 — Year-end workflow
+
+1. **Final refresh** after last month of FY.
+2. **Export PDF** of report page for records.
+3. **Save** final `Lookahead_Void_Loss_2025-26.pbix` → move copy to `Archive/` (read-only).
+4. **Do not** keep refreshing the archived file next year.
+
+---
+
+### Step 9 — Optional: compare two years in one report (advanced)
+
+Only if SMT wants **side-by-side** 25/26 vs 26/27 in **one** app:
+
+1. Put both Excel files in a folder.
+2. Power Query: **Folder** source → combine files → add `FinancialYear` column from filename.
+3. Append into one `FactVoidLoss` with a `FinancialYear` column.
+4. Report: **Slicer** on `FinancialYear` or separate pages per year.
+
+For the interview, **one pbix per year** is simpler and easier to explain.
+
+---
+
+### What breaks automation (when you *would* redo Power Query)
+
+| Change | Action |
+|--------|--------|
+| New month columns (same layout) | Refresh only |
+| New file, same layout | New parameter path or new pbix from template |
+| Columns A–F renamed or moved | Update promoted headers / MetaCols list |
+| Month blocks not in groups of 3 | Redesign unpivot logic |
+| Data moves from Excel to database | Replace source with SQL; keep measure logic |
+
+---
+
+### Interview talking points (year versioning)
+
+> “For monthly reporting within the year, I’d refresh the same Power BI file — the unpivot picks up new columns automatically. At year-end I’d archive the 25/26 report and spin up a new 26/27 file from a template, updating the Excel path and organisational target parameter, so we never overwrite last year’s dashboard. The transformation logic is reusable unless the source layout changes.”
+
 ---
 
 ## Link to dashboard build
@@ -363,6 +563,12 @@ Once **`FactVoidLoss`** loads correctly, follow:
 
 ---
 
-## Interview talking point
+## Interview talking points
+
+**Refresh & data quality**
 
 > “The report connects directly to the Excel void loss worksheet. Power Query unpivots any new monthly columns on refresh, maps the date row to each month block, and the DAX KPIs recalculate without remodelling. We confirmed the February period with Performance when the column had been mislabelled as March.”
+
+**New financial year**
+
+> “I’d version reports by financial year — archive 25/26, create 26/27 from a template with updated file path and target — while keeping one refreshable model within each year for monthly updates.”
