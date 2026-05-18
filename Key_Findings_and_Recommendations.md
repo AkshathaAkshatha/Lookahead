@@ -10,6 +10,30 @@ Organisationally we are **not meeting** the 6.5% void loss target. Year-to-date 
 
 ---
 
+## Written commentary (SMT style)
+
+**Void loss performance — year to date (April 2025 to March 2026)**
+
+Void loss performance for the year to date remains **well above** the organisational target of **6.5%** set for 2025/26. Across the portfolio, void loss totalled **£844,114** against **£7,827,899** rent charged, giving a year-to-date void loss rate of **10.78%** — approximately **4.3 percentage points above target**, equivalent to roughly **£335,000** of rent lost through voids above what would have been expected at target performance.
+
+Performance is **not evenly distributed** across the estate. Only **12 of 42 buildings (29%)** are at or below their individual building void loss targets year to date. A relatively small number of schemes account for a large share of the problem: the **top five buildings by void loss pounds** represent approximately **one third of total organisational void loss**. The highest year-to-date void loss rates are seen at **Long Acre Street (39.0%)**, **Hopley Road (36.5%)**, **Malaga Crescent (35.6%)**, **Alphen Road (33.9%)** and **Park Road (29.1%)**. Targeted intervention on these schemes would have a disproportionate impact on the organisational KPI.
+
+**By specialism**, void loss is concentrated in **homelessness**, which accounts for the **largest share of void loss in cash terms (approximately 41% of total void loss pounds)** at a year-to-date rate of **12.46%**. **Learning disabilities** records the **highest void loss rate (12.82% year to date)**. **Young people** services perform in the mid-range at **9.69%**. **Mental health** is the strongest-performing specialism at **9.03%** year to date, but remains above the **6.5%** organisational target. This pattern suggests that any improvement programme should prioritise homelessness void loss pounds, while learning disabilities and selected outlier buildings require focused void turnaround and management oversight.
+
+**In-month performance** indicates some improvement compared with the **first quarter of the year** (approximately **11.6%** April–June 2025 compared with around **10.6%** in the most recent months supplied), but the trend is **not consistently downward**. The organisation achieved notably stronger in-month outturns in **August 2025 (8.80%)** and **December 2025 (9.77%)**, demonstrating that better performance is achievable at scale; however, **March 2026 (11.21%)** was weaker than December, and month-to-month volatility remains a concern. **February 2026 is not included in the dataset provided.** Analysis is based on supplied months only; February has not been imputed or estimated. The monthly trend chart should be read with this gap in mind so that movement from January to March is not interpreted as a single-month change.
+
+**Variation by housing management area** is also material. Some manager portfolios report materially lower year-to-date void loss rates (for example, **Manager 6 at 5.36%** and **Manager 8 at 8.00%**) than others (for example, **Manager 4 at 13.34%**). This points to scope to **share good practice** on void management and re-let performance, alongside targeted support where portfolio mix and outlier buildings drive poorer results. *The dataset does not include void reason codes (for example referral delays); understanding operational drivers would require further work with services.*
+
+**Recommendations**
+
+For the remainder of 2025/26, we recommend: (1) **90-day void reduction plans** for the top five buildings by void loss pounds; (2) a **homelessness void loss improvement programme**, including review of outlier schemes such as **Hopley Road** and **Sherry Close**; (3) **operational review** of the conditions that produced stronger organisational months in **August and December**, with a view to embedding those practices; and (4) **peer support** between better- and poorer-performing housing manager areas.
+
+For **2026/27**, we recommend setting the **organisational void loss target at 9.0%**, with an internal stretch of **8.5%** by the end of the year. This represents a credible step down from the current year-to-date position of **10.78%** while maintaining ambition. It is preferable to repeating a **6.5%** target that the portfolio has not been able to sustain in the current year. Differentiated targets by specialism are appropriate (**mental health 7.5%**, **young people 8.5%**, **homelessness 10.0%**, **learning disabilities 10.5%**), with a planned return to **6.5%** organisationally by **2028/29** through stepped annual improvements.
+
+Reporting to the Senior Management Team should continue to focus on the **year-to-date void loss percentage and pounds** as the headline KPI, supplemented by **in-month performance** and a **three-month rolling average** to show direction of travel without over-interpreting a single month.
+
+---
+
 ## Key findings
 
 ### Organisation — YTD KPI (primary SMT metric)
