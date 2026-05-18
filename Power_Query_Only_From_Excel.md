@@ -557,9 +557,244 @@ For the interview, **one pbix per year** is simpler and easier to explain.
 
 ---
 
-### Interview talking points (year versioning)
+### Interview talking points (year versioning — Approach A)
 
 > “For monthly reporting within the year, I’d refresh the same Power BI file — the unpivot picks up new columns automatically. At year-end I’d archive the 25/26 report and spin up a new 26/27 file from a template, updating the Excel path and organisational target parameter, so we never overwrite last year’s dashboard. The transformation logic is reusable unless the source layout changes.”
+
+---
+
+## PART 9 — Financial Year slicer (one report, year-on-year comparison)
+
+**Goal:** One dashboard. Slicer selects **2025/26** or **2026/27**. KPIs and charts filter to that year. Optional chart compares **same calendar month** across years.
+
+**Today:** You only have one Excel file — add `FinancialYear = "2025/26"` now. When **2026/27** file arrives, append it — no new dashboard.
+
+---
+
+### Step 1 — Folder for all year files
+
+Create a folder, e.g.:
+
+```
+Lookahead/Data/
+├── Interview_Data_Worksheet_2025-26.xlsx
+└── (later) Interview_Data_Worksheet_2026-27.xlsx
+```
+
+Same sheet layout in every file.
+
+---
+
+### Step 2 — Turn single-file query into a function (Power Query)
+
+1. Open **Transform data**.
+2. Select your working **`FactVoidLoss`** query (after unpivot logic works on one file).
+3. **Right-click → Create Function** (or **Advanced** → create function `TransformVoidLossFile`).
+4. Name it **`TransformVoidLossFile`** with parameter **`FilePath`** (text).
+
+Inside the function: paste your full transformation (from Excel load through to typed columns). Last step must return the table.
+
+**Test:** Invoke with your 2025/26 path → same 462 rows as before.
+
+*If **Create Function** is greyed out, duplicate the query, rename to `TransformVoidLossFile`, add `(FilePath as text)` in Advanced Editor as first line after `let`.*
+
+---
+
+### Step 3 — Load folder and append all years
+
+1. **New Source → Folder** → point to `Lookahead/Data/`.
+2. **Combine → Combine & Transform** (or **Edit** then filter `.xlsx` only).
+3. For each file, call the function:
+
+**Pattern in Power Query:**
+
+```powerquery
+let
+    Source = Folder.Files("C:\...\Lookahead\Data"),
+    XlsxOnly = Table.SelectRows(Source, each Text.EndsWith([Extension], ".xlsx")),
+    AddData = Table.AddColumn(XlsxOnly, "Data", each TransformVoidLossFile([Folder Path] & [Name])),
+    Combined = Table.Combine(AddData[Data])
+in
+    Combined
+```
+
+4. **Add `FinancialYear` from filename** (if not already inside function):
+
+```powerquery
+= Table.AddColumn(Combined, "FinancialYear", each
+    if Text.Contains([Name], "2026-27") then "2026/27"
+    else if Text.Contains([Name], "2025-26") then "2025/26"
+    else "Unknown"
+)
+```
+
+*Better:* derive from filename with `Text.BetweenDelimiters([Name], "_", ".xlsx")` → `2025-26` → replace `-` with `/`.
+
+5. Rename final query **`FactVoidLoss`** → **Close & Apply**.
+
+**Refresh later:** Drop `Interview_Data_Worksheet_2026-27.xlsx` in folder → **Refresh** → second year appears in slicer.
+
+---
+
+### Step 4 — Table of targets per year (for correct target line)
+
+**Enter data** (Home → Enter data):
+
+| FinancialYear | OrgTargetPct |
+|---------------|--------------|
+| 2025/26       | 0.065        |
+| 2026/27       | 0.09         |
+
+Name table **`DimFinancialYear`**.
+
+**Model view:** Relate `DimFinancialYear[FinancialYear]` → `FactVoidLoss[FinancialYear]` (one-to-many).
+
+**Measures:**
+
+```dax
+Org Target % =
+SELECTEDVALUE ( DimFinancialYear[OrgTargetPct], 0.065 )
+```
+
+When the slicer selects **2026/27**, target line becomes **9%** automatically.
+
+---
+
+### Step 5 — Add Fiscal Month for YoY line charts
+
+Months must align across years (April = month 1 of FY, etc.).
+
+**Option A — Custom column in Power Query:**
+
+```powerquery
+FiscalMonthNumber = Date.Month([MonthStart])
+FiscalMonthName = Date.ToText([MonthStart], "MMM")
+```
+
+(Apr–Mar order works if all years start April; sort by `MonthStart` within year.)
+
+**Option B — DAX calculated column** (if FY always starts April):
+
+```dax
+Fiscal Month Sort =
+VAR M = MONTH ( FactVoidLoss[MonthStart] )
+RETURN IF ( M >= 4, M, M + 12 )
+```
+
+---
+
+### Step 6 — Financial Year slicer on the report
+
+1. **Insert → Slicer**.
+2. Field: **`FinancialYear`** (from `FactVoidLoss` or `DimFinancialYear`).
+3. Style: **Dropdown**; turn on **Select all** if you want multi-year views.
+4. Place at top right (above Specialism slicer).
+
+**Behaviour:**
+
+- Select **2025/26** → all cards/charts show that year’s YTD and months.
+- Select **2026/27** when file exists → switches dataset.
+- **Ctrl+click** two years → filters to both (useful for combined tables; line chart needs Legend — below).
+
+Set **default:** **Edit interactions** / bookmark, or slicer default filter **2025/26** only.
+
+---
+
+### Step 7 — Update DAX measures (respect slicer automatically)
+
+These already filter by slicer if `FinancialYear` is on the fact table:
+
+```dax
+YTD Void Loss £ = SUM ( FactVoidLoss[Void Loss] )
+YTD Rent Charged £ = SUM ( FactVoidLoss[Rent Charged] )
+YTD Void Loss % = DIVIDE ( [YTD Void Loss £], [YTD Rent Charged £] )
+In-Month Void Loss % = DIVIDE ( SUM ( FactVoidLoss[Void Loss] ), SUM ( FactVoidLoss[Rent Charged] ) )
+```
+
+No change needed — **slicer filters fact rows**.
+
+**Optional — show selected year in title:**
+
+```dax
+Selected FY Label =
+"Void Loss Performance — YTD " & SELECTEDVALUE ( FactVoidLoss[FinancialYear], "All years" )
+```
+
+Use in a **Card** or text box (needs Card visual with measure, or manual title updated each demo).
+
+---
+
+### Step 8 — Year-on-year comparison line chart
+
+**Chart type:** Line chart
+
+| Well | Field |
+|------|--------|
+| **X-axis** | `MonthStart` **or** `FiscalMonthName` (sort by month number) |
+| **Y-axis** | `In-Month Void Loss %` |
+| **Legend** | **`FinancialYear`** |
+| **Slicer** | Set **Financial Year** to **multi-select** both years, **or** clear slicer and use Legend only |
+
+**How to read it:** Two lines — **2025/26** vs **2026/27** — same months on X-axis (Apr, May, …).
+
+**Tip:** If X-axis duplicates (Apr 2025 and Apr 2026 as separate labels), use **FiscalMonthName** on X-axis and **FinancialYear** on Legend, with **Fiscal Month Sort** as sort column.
+
+---
+
+### Step 9 — Optional YoY comparison card
+
+```dax
+YTD Void Loss % (Prior Year) =
+CALCULATE (
+    [YTD Void Loss %],
+    SAMEPERIODLASTYEAR ( FactVoidLoss[MonthStart] )
+)
+```
+
+*Only works if both years exist in the model and dates align — for different FY files, simpler approach:*
+
+```dax
+YTD Void Loss % 2025-26 =
+CALCULATE ( [YTD Void Loss %], FactVoidLoss[FinancialYear] = "2025/26" )
+
+YTD Void Loss % 2026-27 =
+CALCULATE ( [YTD Void Loss %], FactVoidLoss[FinancialYear] = "2026/27" )
+
+YoY Change pp =
+[YTD Void Loss % 2026-27] - [YTD Void Loss % 2025-26]
+```
+
+Show as cards when both years loaded.
+
+---
+
+### Step 10 — What you do each year (slicer approach)
+
+| Event | Action |
+|-------|--------|
+| **New month (2025/26)** | Update that year’s Excel → **Refresh** |
+| **New year (2026/27)** | Add `Interview_Data_Worksheet_2026-27.xlsx` to **Data** folder → **Refresh** |
+| **New org target** | Add row to **`DimFinancialYear`** table |
+| **Dashboard** | **Same `.pbix`** — slicer gains new year |
+
+**Do not overwrite** old Excel files — keep them in the folder for history.
+
+---
+
+### Step 11 — For your interview submission (one file only)
+
+You only have 2025/26 data today:
+
+1. Add column in Power Query: **`FinancialYear = "2025/26"`** (custom column).
+2. Add **`DimFinancialYear`** with one row: `2025/26`, `0.065`.
+3. Build **Financial Year slicer** (one value for now).
+4. Say in presentation: *“When 26/27 data is added to the folder, refresh adds a second slicer value and enables YoY on the legend chart.”*
+
+---
+
+### Interview talking point (year slicer)
+
+> “I’ve modelled financial year on the fact table so SMT can slice one dashboard by year or compare years on the same trend chart. New annual files go into a standard folder; Power Query appends them on refresh without rebuilding the report. Targets sit in a small dimension table so the 6.5% and 9% lines follow the selected year.”
 
 ---
 
@@ -578,6 +813,6 @@ Once **`FactVoidLoss`** loads correctly, follow:
 
 > “The report connects directly to the Excel void loss worksheet. Power Query unpivots any new monthly columns on refresh, maps the date row to each month block, and the DAX KPIs recalculate without remodelling. We confirmed the February period with Performance when the column had been mislabelled as March.”
 
-**New financial year**
+**New financial year (slicer / single report)**
 
-> “I’d version reports by financial year — archive 25/26, create 26/27 from a template with updated file path and target — while keeping one refreshable model within each year for monthly updates.”
+> “Financial year is a slicer on one report — new annual workbooks drop into a folder and append on refresh, so we can compare 25/26 and 26/27 on the same visuals without overwriting history. Targets are year-specific via a small dimension table.”

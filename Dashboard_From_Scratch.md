@@ -146,6 +146,7 @@ Arrange in a row under the title.
 
 1. **Insert → Slicer** → `Specialism`.
 2. Another slicer → `Manager`.
+3. **(Recommended for YoY)** **Financial Year** slicer — see **`Power_Query_Only_From_Excel.md` → Part 9**. Add column `FinancialYear = "2025/26"` in Power Query; when next year’s Excel is added, refresh shows **2026/27** in the same slicer.
 
 Place on the right side. Selecting a value filters **all** visuals.
 
